@@ -1,0 +1,1 @@
+This is full stack authentication app using Django as backend and react as frontend
