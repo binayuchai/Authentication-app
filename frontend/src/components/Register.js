@@ -20,9 +20,7 @@ export default function Register() {
 
 
   };
-  const checkSign = ()=>{
-    console.log("name:",username,"\n email: ",email)
-  }
+
   return (
     <>
     <div className="container">
