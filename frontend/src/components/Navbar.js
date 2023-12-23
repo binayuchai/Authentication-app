@@ -1,7 +1,15 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
+  const [isAuth,setIsAuth] = useState(false);
+
+  useEffect(()=>{
+    if(localStorage.getItem('access_token')!==null){
+      setIsAuth(true);
+    }
+  },[isAuth])
+
   return (
     <>
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -15,9 +23,9 @@ export default function Navbar() {
         <li className="nav-item">
           <Link className="nav-link active" aria-current="page" to={"/"}>Home</Link>
         </li>
-        <li className="nav-item">
-          <Link className="nav-link" to={"login/"}>Login</Link>
-        </li>
+       {isAuth? <li className="nav-item">
+          <Link className="nav-link" to={"/"}>Login</Link>
+        </li> :null}
         <li className="nav-item">
         <Link className="nav-link" to={"register/"}>Signup</Link>
       </li>

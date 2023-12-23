@@ -4,12 +4,10 @@ import axios from "axios"
 
 export default function Login() {
    const [email,setEmail] = useState('')
-   const [password,setPassword] = useState('')
 
    const handleSubmit =async()=>{
-    console.log("Email: " + email + "password: " +password)
     try{
-      const response = await axios.post("http://localhost:8000/api/login/",{email:email,password:password})
+      const response = await axios.post("http://localhost:8000/api/login/",{email:email})
       console.log("Sign in successful", response.data)
 
 
@@ -32,21 +30,13 @@ export default function Login() {
     <label className="form-label" htmlFor="form2Example1">Email address</label>
   </div>
 
-  <div className="form-outline mb-4">
-    <input type="password" id="form2Example2" className="form-control" value={password} onChange={(e)=>{setPassword(e.target.value)}}/>
-    <label className="form-label" htmlFor="form2Example2">Password</label>
-  </div>
+
 
   <div className="row mb-4">
-    <div className="col d-flex justify-content-center">
-      <div className="form-check">
-        <input className="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-        <label className="form-check-label" htmlFor="form2Example31"> Remember me </label>
-      </div>
-    </div>
+
 
     <div className="col">
-      <Link to={"#"}>Forgot password?</Link>
+      <Link to={"/reset-password/"}>Forgot password?</Link>
     </div>
   </div>
 
