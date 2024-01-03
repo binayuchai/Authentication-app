@@ -18,6 +18,14 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
+class HomeView(APIView):
+    renderer_classes = [UserRenderer]
+
+    permission_classes = [IsAuthenticated]
+    def get(self,request,format=None):
+        content = {'message':'Welcome to my Website'}
+        return Response(content)
+        
 class UserRegisterView(APIView):
     renderer_classes = [UserRenderer]
     def post(self,request,format=None):

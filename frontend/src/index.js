@@ -12,12 +12,17 @@ import Login from './components/Login';
 import Signup from './components/Register';
 import { RouterProvider,createBrowserRouter, createRoutesFromElements,Route } from 'react-router-dom';
 import ResetPassword from './components/ResetPassword';
+import './components/interceptor/axios';
+import Logout from './components/Logout';
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App/>}>
      <Route path="home" element={<Home/>}/>
      <Route path="" element={<Login/>}/>
-     <Route path="register" element={<Signup/>}/><Route path="register" element={<Signup/>}/>
+     <Route path="register" element={<Signup/>}/>
+     <Route path="logout" element={<Logout/>}/>
+
      <Route path="reset-password" element={<ResetPassword/>}/>
 
 
