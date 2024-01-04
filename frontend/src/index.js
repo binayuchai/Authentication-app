@@ -10,13 +10,28 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import Home from './components/Home';
 import Login from './components/Login';
 import Signup from './components/Register';
-import { RouterProvider,createBrowserRouter, createRoutesFromElements,Route } from 'react-router-dom';
+import { RouterProvider,createBrowserRouter, createRoutesFromElements,Route, BrowserRouter } from 'react-router-dom';
+import ResetPassword from './components/ResetPassword';
+import './components/interceptor/axios';
+import Logout from './components/Logout';
+import ChangePassword from './components/ChangePassword';
+import Welcome from './components/Welcome';
+import ForgotPassword from './components/ForgotPassword';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App/>}>
-     <Route path="" element={<Home/>}/>
-     <Route path="login" element={<Login/>}/>
+     <Route path="home" element={<Home/>}/>
+     <Route path="" element={<Welcome/>}/>
      <Route path="register" element={<Signup/>}/>
+     <Route path="login" element={<Login/>}/>
+
+     <Route path="logout" element={<Logout/>}/>
+     <Route path="forgot-password" element={<ForgotPassword/>}/>
+
+
+     <Route path="change-password" element={<ChangePassword/>}/>
+     <Route path="reset-password/:uid/:token" element={<ResetPassword/>}/>
+
 
 
     

@@ -9,6 +9,10 @@ from auth_app.renderers import UserRenderer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
+import logging
+
+logger = logging.getLogger(__name__)
 #Creating tokens manually
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -18,6 +22,14 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
+class HomeView(APIView):
+    renderer_classes = [UserRenderer]
+
+    permission_classes = [IsAuthenticated]
+    def get(self,request,format=None):
+        content = {'message':'Welcome to my Website'}
+        return Response(content)
+        
 class UserRegisterView(APIView):
     renderer_classes = [UserRenderer]
     def post(self,request,format=None):
@@ -75,8 +87,12 @@ class SendPasswordResetEmailView(APIView):
     renderer_classes = [UserRenderer]
 
     def post(self,request,format=None):
+        logger.info('Received POST request to /api/send-reset-password/')
+
         serializer = SendPasswordResetSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
+            logger.info('Password reset link sent successfully')
+
             return Response({'msg':'Password reset link has been sent to your email, please check it.'},status=status.HTTP_200_OK)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
  

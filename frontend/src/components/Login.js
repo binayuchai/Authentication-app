@@ -1,36 +1,82 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect,useState } from 'react'
+import { Link,useNavigate } from 'react-router-dom'
+import axios from "axios"
 
 export default function Login() {
+   const [email,setEmail] = useState('')
+   const [password,setPassword] = useState('')
+   const [isAuth,setIsAuth] = useState(false)
+   let navigate = useNavigate();
+
+
+  useEffect(()=>{
+    if(localStorage.getItem('access_token')!==null){
+      setIsAuth(true);
+    }
+  },[isAuth])
+
+   const handleSubmit =async(e)=>{
+    e.preventDefault()
+    try{
+      const response = await axios.post("http://localhost:8000/api/login/",{email:email,password:password},
+      {headers: 
+      {'Content-Type': 'application/json'}});
+      console.log("Sign in successful", response.data)
+      //Initializer the access and refresh token in localstorage
+      localStorage.clear();
+      console.log("Data is : ",response)
+      console.log("Data is : ",response.data.token['access'])
+      console.log("Data is : ",response.data.msg)
+
+      localStorage.setItem('access_token',response.data.token['access'])
+      localStorage.setItem('refresh_token',response.data.token['refresh'])
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token['access']}`;
+      
+
+      
+
+      navigate('/home');
+
+
+
+    }
+    catch(error){
+      console.log("Error occured during sign in",error.response.data)
+    }
+
+
+   }
+   
   return (
     <>
     <div className="container">
     <div>Login</div>
-    <form>
+    <form onSubmit={handleSubmit}>
   <div className="form-outline mb-4">
-    <input type="email" id="form2Example1" className="form-control" />
-    <label className="form-label" for="form2Example1">Email address</label>
+  <label className="form-label" htmlFor="form2Example1">Email address</label>
+    <input type="email" id="form2Example1" className="form-control" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
   </div>
 
-  <div className="form-outline mb-4">
-    <input type="password" id="form2Example2" className="form-control" />
-    <label className="form-label" for="form2Example2">Password</label>
-  </div>
+<div class="mb-3">
+  <label for="exampleInputPassword1" class="form-label">Password</label>
+  <input type="password" class="form-control" id="exampleInputPassword1" onChange={(e)=>{setPassword(e.target.value)}}/>
+</div>
+<div class="mb-3 form-check">
+  <input type="checkbox" class="form-check-input" id="exampleCheck1"/>
+  <label class="form-check-label" for="exampleCheck1">Check me out</label>
+</div>
+
+
 
   <div className="row mb-4">
-    <div className="col d-flex justify-content-center">
-      <div className="form-check">
-        <input className="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-        <label className="form-check-label" for="form2Example31"> Remember me </label>
-      </div>
-    </div>
+
 
     <div className="col">
-      <Link to={"#"}>Forgot password?</Link>
+      <Link to={"/forgot-password/"}>Forgot password?</Link>
     </div>
   </div>
 
-  <button type="button" className="btn btn-primary btn-block mb-4">Sign in</button>
+  <button type="submit" className="btn btn-primary btn-block mb-4">Sign in</button>
 
   <div className="text-center">
     <p>Not a member? <Link to={"/register/"}>Register</Link></p>
