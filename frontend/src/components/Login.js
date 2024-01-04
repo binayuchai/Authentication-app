@@ -1,12 +1,22 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect,useState } from 'react'
+import { Link,useNavigate } from 'react-router-dom'
 import axios from "axios"
 
 export default function Login() {
    const [email,setEmail] = useState('')
    const [password,setPassword] = useState('')
+   const [isAuth,setIsAuth] = useState(false)
+   let navigate = useNavigate();
 
-   const handleSubmit =async()=>{
+
+  useEffect(()=>{
+    if(localStorage.getItem('access_token')!==null){
+      setIsAuth(true);
+    }
+  },[isAuth])
+
+   const handleSubmit =async(e)=>{
+    e.preventDefault()
     try{
       const response = await axios.post("http://localhost:8000/api/login/",{email:email,password:password},
       {headers: 
@@ -25,7 +35,7 @@ export default function Login() {
 
       
 
-      window.location.href = '/home/'
+      navigate('/home');
 
 
 
@@ -41,7 +51,7 @@ export default function Login() {
     <>
     <div className="container">
     <div>Login</div>
-    <form>
+    <form onSubmit={handleSubmit}>
   <div className="form-outline mb-4">
   <label className="form-label" htmlFor="form2Example1">Email address</label>
     <input type="email" id="form2Example1" className="form-control" value={email} onChange={(e)=>{setEmail(e.target.value)}}/>
@@ -62,11 +72,11 @@ export default function Login() {
 
 
     <div className="col">
-      <Link to={"/reset-password/"}>Forgot password?</Link>
+      <Link to={"/forgot-password/"}>Forgot password?</Link>
     </div>
   </div>
 
-  <button type="button" className="btn btn-primary btn-block mb-4" onClick={handleSubmit}>Sign in</button>
+  <button type="submit" className="btn btn-primary btn-block mb-4">Sign in</button>
 
   <div className="text-center">
     <p>Not a member? <Link to={"/register/"}>Register</Link></p>

@@ -1,39 +1,42 @@
-import React,{useState}from 'react'
-import axios from "axios"
-import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import React,{useState} from 'react'
 
-export default function ResetPassword() {
+export default function ChangePassword() {
   const [password, setPassword] = useState('')
   const [cpassword,setCPassword] = useState('')
-  const { uid, token } = useParams();
-  const submitForm = async(e)=>{
-    e.preventDefault();
-    console.log("submited");
-    console.log(password + " " + cpassword)
+    const submitForm = async(e)=>{
+      e.preventDefault();
+      console.log("submited");
+      console.log(password + " " + cpassword)
+      const token = localStorage.getItem('access_token');
 
-
-    try{
-      const response = await axios.post(`http://localhost:8000/api/reset-password/${uid}/${token}/`,{password:password,password2:cpassword},{
-        headers:{
+      try{
+        const response = await axios.post("http://localhost:8000/api/change-password/",{password:password,password2:cpassword},{
+         headers:{
           'Content-Type':'application/json',
-        }
-      })
-      
-      
-      console.log("change password successful", response)
-      window.location.href = '/login/'
+          'Authorization': `Bearer ${token}`,
 
+         }
+        },{withCredentials:true});
+        setPassword('')
+        setCPassword('')
+        console.log("change password successful", response.data)
 
-    }catch(e){
-      console.log("Error during change password",e)
+      }catch(e){
+        console.log("Error during change password",e)
+
+      }
 
     }
 
-  }
+    
+  
+ 
+  
+  
   return (
     <>
-    <div>ResetPassword</div>
-     <div className="container">
+    <div className="container">
     
     
     
@@ -53,6 +56,7 @@ export default function ResetPassword() {
     </div>
     
     </>
-    
+
+
   )
 }
